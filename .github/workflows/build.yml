@@ -34,7 +34,7 @@ jobs:
       with:
         push: true
         target: deps
-        tags: "ghcr.io/${{ REPO }}:${{ github.ref_name }}"
+        tags: "ghcr.io/${{ env.REPO }}:${{ github.ref_name }}"
 
     - name: Use nodeJS 12
       uses: actions/setup-node@v3
