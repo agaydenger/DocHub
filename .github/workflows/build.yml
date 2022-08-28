@@ -30,7 +30,7 @@ jobs:
       with:
         push: true
         target: deps
-        tags: "ghcr.io/${{ github.repository }}:${{ github.ref }}"
+        tags: "ghcr.io/${{ github.repository }}:${{ github.ref_name }}"
 
     - name: Use nodeJS 12
       uses: actions/setup-node@v3
@@ -50,6 +50,6 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: true
-        automatic_release_tag: "${{ github.ref }}"
+        automatic_release_tag: "${{ github.ref_name }}"
         files: |
           plugin.zip
