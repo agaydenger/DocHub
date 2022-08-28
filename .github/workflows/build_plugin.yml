@@ -26,8 +26,10 @@ jobs:
       - name: Archive artifact
         run: zip -j plugin.zip dist/plugin.html
 
-      - name: Upload plugin.html
-        uses: actions/upload-artifact@v3
-        with:
-          name: plugin
-          path: plugin.zip
+      - name: Publish release
+        uses: "marvinpinto/action-automatic-releases@latest"
+          with:
+            repo_token: "${{ secrets.GITHUB_TOKEN }}"
+            prerelease: false
+            files: |
+              plugin.zip
