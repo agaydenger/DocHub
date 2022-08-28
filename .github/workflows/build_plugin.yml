@@ -1,35 +1,33 @@
-name: Build dockhub plugin visual interface
-on:
-  push:
-    tags:
-      - plugin-*
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Get git tag
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-
-      - name: Use nodeJS 12
-        uses: actions/setup-node@v3
-        with:
-          node-version: 12.x
-
-      - name: Build plugin
-        run: |
-          npm install
-          npm run build:plugin
-
-      - name: Archive artifact
-        run: zip -j plugin.zip dist/plugin.html
-
-      - name: Publish release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          files: |
-            plugin.zip
+#name: Build dockhub plugin visual interface
+#on:
+#  push:
+#    tags:
+#      - plugin-*
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Use nodeJS 12
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 12.x
+#
+#      - name: Build plugin
+#        run: |
+#          npm install
+#          npm run build:plugin
+#
+#      - name: Archive artifact
+#        run: zip -j plugin.zip dist/plugin.html
+#
+#      - name: Publish release
+#        uses: "marvinpinto/action-automatic-releases@latest"
+#        with:
+#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#          prerelease: true
+#
+#          files: |
+#            plugin.zip

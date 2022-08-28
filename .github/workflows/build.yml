@@ -9,26 +9,47 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Get git tag
-      id: vars
-      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
-    - id: buildx
+    - name: Setup buildX
       uses: docker/setup-buildx-action@v1
       with:
         config-inline: |
           [registry."docker.io"]
             mirrors = ["mirror.gcr.io"]
+
     - name: Login to ghrc.io
       uses: docker/login-action@v1
       with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Build and push
+
+    - name: Build and push docker image
       id: docker_build
       uses: docker/build-push-action@v2
       with:
         push: true
         target: deps
-        tags: "ghcr.io/rabotaru/dochub:${{ steps.vars.outputs.tag }}"
+        tags: "ghcr.io/${{ github.repository }}:${{ github.ref }}"
+
+    - name: Use nodeJS 12
+      uses: actions/setup-node@v3
+      with:
+        node-version: 12.x
+
+    - name: Build plugin
+      run: |
+        npm install
+        npm run build:plugin
+
+    - name: Archive artifact
+      run: zip -j plugin.zip dist/plugin.html
+
+    - name: Publish release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: true
+        automatic_release_tag: "${{ github.ref }}"
+        files: |
+          plugin.zip
