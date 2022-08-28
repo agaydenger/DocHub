@@ -17,11 +17,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 12.x
+
+      - name: Build plugin
         run: |
           npm install
           npm run build:plugin
+
       - name: Archive artifact
         run: zip -j plugin.zip dist/plugin.html
+
       - name: Upload plugin.html
         uses: actions/upload-artifact@v3
         with:
